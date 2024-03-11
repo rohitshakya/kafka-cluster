@@ -1,0 +1,63 @@
+{
+  "version" : "3",
+  "services" : {
+    "zookeeper" : {
+      "image" : "wurstmeister/zookeeper",
+      "container_name" : "zookeeper",
+      "ports" : [ "2182:2181" ],
+      "healthcheck" : {
+        "test" : [ "CMD", "nc", "-vz", "localhost", "2181" ],
+        "interval" : "5s",
+        "timeout" : "50s",
+        "retries" : 3
+      },
+      "networks" : {
+        "service1_net" : { }
+      }
+    },
+    "kafka" : {
+      "image" : "wurstmeister/kafka:2.11-1.1.1",
+      "container_name" : "kafka",
+      "ports" : [ "9092:9092","9093:9093" ],
+      "environment" : [ "KAFKA_LISTENERS=INSIDE://0.0.0.0:9092,OUTSIDE://0.0.0.0:9093", "KAFKA_ADVERTISED_LISTENERS=INSIDE://host.docker.internal:9092,OUTSIDE://localhost:9093", "KAFKA_LISTENER_SECURITY_PROTOCOL_MAP=INSIDE:PLAINTEXT,OUTSIDE:PLAINTEXT", "KAFKA_INTER_BROKER_LISTENER_NAME=INSIDE", "KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181", "KAFKA_CREATE_TOPICS=userSaved:1:1" ],
+      "volumes" : [ "/var/run/docker.sock:/var/run/docker.sock" ],
+      "healthcheck" : {
+        "test" : [ "CMD", "nc", "-vz", "localhost", "9092" ],
+        "interval" : "5s",
+        "timeout" : "50s",
+        "retries" : 3
+      },
+      "networks" : {
+        "service1_net" : { }
+      }
+    },
+    "mysql" : {
+      "image" : "mysql:latest",
+      "container_name" : "mysql",
+      "ports" : [ "3706:3706" ],
+      "environment" : [ "MYSQL_DATABASE=business_partner_olxin", "MYSQL_ROOT_PASSWORD=1234", "MYSQL_TCP_PORT=3706" ],
+      "healthcheck" : {
+        "test" : [ "CMD", "mysqladmin", "ping", "-h", "localhost" ],
+        "interval" : "2s",
+        "timeout" : "20s",
+        "retries" : 10
+      },
+      "volumes" : [ "./mysql/data:/docker-entrypoint-initdb.d" ],
+      "networks" : {
+        "service1_net" : { }
+      }
+    },
+    "external-services" : {
+      "image" : "mockserver/mockserver:5.14.0",
+      "container_name" : "external-services",
+      "ports" : [ "31270:31270" ],
+      "environment" : [ "MOCKSERVER_LOG_LEVEL=TRACE", "MOCKSERVER_SERVER_PORT=31270" ],
+      "networks" : {
+        "service1_net" : { }
+      }
+    }
+  },
+  "networks" : {
+    "service1_net" : { }
+  }
+}

@@ -1,0 +1,73 @@
+site_name: PHP Kafka Client
+site_author: Dirk Adler
+
+docs_dir: docs
+
+theme:
+  name: 'material'
+  palette:
+    - scheme: default
+      primary: white
+      toggle:
+        icon: material/toggle-switch-off-outline
+        name: Switch to dark mode
+    - scheme: slate
+      primary: black
+      toggle:
+        icon: material/toggle-switch
+        name: Switch to light mode
+  logo: 'img/php-rdkafka.svg'
+  favicon: 'img/php-rdkafka.svg'
+  features:
+    - navigation.tabs
+    - navigation.indexes
+  include_sidebar: false
+
+repo_name: 'idealo/php-rdkafka-ffi'
+repo_url: 'https://github.com/idealo/php-rdkafka-ffi'
+
+# enabled extensions
+markdown_extensions:
+  - admonition
+  - def_list
+  - footnotes
+  - meta
+  - smarty
+  - attr_list
+  - toc:
+      permalink: true
+  - pymdownx.arithmatex
+  - pymdownx.betterem:
+      smart_enable: all
+  - pymdownx.caret
+  - pymdownx.critic
+  - pymdownx.details
+  - pymdownx.emoji:
+      emoji_index: !!python/name:materialx.emoji.twemoji
+      emoji_generator: !!python/name:materialx.emoji.to_svg
+  - pymdownx.highlight:
+      # disables use of <?php
+      extend_pygments_lang:
+        - name: php
+          lang: php
+          options:
+            startinline: true
+        - name: php-inline
+          lang: php
+          options:
+            startinline: true
+  - pymdownx.inlinehilite
+  - pymdownx.keys
+  - pymdownx.magiclink
+  - pymdownx.mark
+  - pymdownx.smartsymbols
+  - pymdownx.superfences
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - pymdownx.tilde
+
+copyright: Copyright &copy; idealo internet GmbH.
+
+plugins:
+  - search
+  - awesome-pages
